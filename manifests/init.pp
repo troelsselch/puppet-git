@@ -13,12 +13,17 @@
 #   class { 'git': }
 #
 class git($version = present) {
-  package { 'git-core':
+  package { 'git':
     ensure => $version,
+    name => $operatingsystem ? {
+     ubuntu => "git-core",
+     centos => "git",
+    }
   }
 
   file { '/etc/gitconfig':
     source  => 'puppet:///modules/git/gitconfig',
-    require => Package['git-core'],
+    require => Package['git'],
   }
 }
+
